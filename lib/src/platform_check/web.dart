@@ -16,7 +16,8 @@ class PlatformWeb extends Platform {
     try {
       Random.secure();
       useBuiltInRng = true;
-    } on UnsupportedError {
+    } catch (_) {
+      // throws UnknownJsTypeError. See 'dart:_js_types'.
       useBuiltInRng = false;
     }
   }
