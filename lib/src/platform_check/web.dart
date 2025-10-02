@@ -13,12 +13,18 @@ class PlatformWeb extends Platform {
   static bool useBuiltInRng = false;
 
   PlatformWeb() {
+    useBuiltInRng = false;
     try {
       Random.secure();
       useBuiltInRng = true;
-    } catch (_) {
-      // throws UnknownJsTypeError. See 'dart:_js_types'.
-      useBuiltInRng = false;
+    } on UnsupportedError {
+      // Random.secure() normally throws this error if
+      // no cryptographically secure random number source is available.
+    } catch (e) {
+      // For Node.js with dart2js compiler, the following error is expected.
+      if (e.runtimeType.toString() == 'UnknownJsTypeError') {
+        // This error is internal to 'dart:_js_helper'.
+      }
     }
   }
 
