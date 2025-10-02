@@ -21,9 +21,10 @@ class PlatformWeb extends Platform {
       // Random.secure() normally throws this error if
       // no cryptographically secure random number source is available.
     } catch (e) {
-      // For Node.js with dart2js compiler, the following error is expected.
-      if (e.runtimeType.toString() == 'UnknownJsTypeError') {
-        // This error is internal to 'dart:_js_helper'.
+      // For Node.js with dart2js compiler, the UnknownJsTypeError error is expected.
+      // This error is internal to 'dart:_js_helper' so we need to inspect the runtimeType.
+      if (!(e.runtimeType.toString() == 'UnknownJsTypeError')) {
+        rethrow;
       }
     }
   }
@@ -55,7 +56,8 @@ class _JsBuiltInEntropySource implements EntropySource {
   @override
   Uint8List getBytes(int len) {
     return Uint8List.fromList(
-        List<int>.generate(len, (i) => _src.nextInt(256)));
+      List<int>.generate(len, (i) => _src.nextInt(256)),
+    );
   }
 }
 
