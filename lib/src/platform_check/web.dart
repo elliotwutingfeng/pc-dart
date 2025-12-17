@@ -55,20 +55,18 @@ class _JsBuiltInEntropySource implements EntropySource {
 
   @override
   Uint8List getBytes(int len) {
-    return Uint8List.fromList(
-      List<int>.generate(len, (i) => _src.nextInt(256)),
-    );
+    final Uint8List bytes = Uint8List(len);
+    for (int i = 0; i < len; i++) {
+      bytes[i] = _src.nextInt(256);
+    }
+    return bytes;
   }
 }
 
 ///
 class _JsNodeEntropySource implements EntropySource {
   @override
-  Uint8List getBytes(int len) {
-    var list = Uint8List(len);
-    NodeCrypto.randomFillSync(list.buffer.toJS);
-    return list;
-  }
+  Uint8List getBytes(int len) => NodeCrypto.randomBytes(len).toDart;
 }
 
 Platform getPlatform() => PlatformWeb.instance;
