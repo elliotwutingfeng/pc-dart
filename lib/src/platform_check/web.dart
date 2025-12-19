@@ -10,24 +10,9 @@ import 'platform_check.dart';
 
 class PlatformWeb extends Platform {
   static final PlatformWeb instance = PlatformWeb();
-  static bool useBuiltInRng = false;
+  static bool useBuiltInRng = !isNodeJS;
 
-  PlatformWeb() {
-    useBuiltInRng = false;
-    try {
-      Random.secure();
-      useBuiltInRng = true;
-    } on UnsupportedError {
-      // Random.secure() normally throws this error if
-      // no cryptographically secure random number source is available.
-    } catch (e) {
-      // For Node.js with dart2js compiler, the UnknownJsTypeError error is expected.
-      // This error is internal to 'dart:_js_helper' so we need to inspect the runtimeType.
-      if (!(e.runtimeType.toString() == 'UnknownJsTypeError')) {
-        rethrow;
-      }
-    }
-  }
+  const PlatformWeb();
 
   @override
   bool get isNative => false;
@@ -39,13 +24,12 @@ class PlatformWeb extends Platform {
   EntropySource platformEntropySource() {
     if (useBuiltInRng) {
       return _JsBuiltInEntropySource();
-    } else {
-      //
-      // Assume that if we cannot get a built in Secure RNG then we are
-      // probably on NodeJS.
-      //
-      return _JsNodeEntropySource();
     }
+    //
+    // Assume that if we cannot get a built in Secure RNG then we are
+    // probably on NodeJS.
+    //
+    return _JsNodeEntropySource();
   }
 }
 
