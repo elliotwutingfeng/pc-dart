@@ -21,16 +21,8 @@ class PlatformWeb extends Platform {
   String get platform => 'web';
 
   @override
-  EntropySource platformEntropySource() {
-    if (useBuiltInRng) {
-      return _JsBuiltInEntropySource();
-    }
-    //
-    // Assume that if we cannot get a built in Secure RNG then we are
-    // probably on NodeJS.
-    //
-    return _JsNodeEntropySource();
-  }
+  EntropySource platformEntropySource() =>
+      useBuiltInRng ? _JsBuiltInEntropySource() : _JsNodeEntropySource();
 }
 
 // Uses the built in entropy source
