@@ -10,7 +10,7 @@ import 'platform_check.dart';
 
 class PlatformWeb extends Platform {
   static final PlatformWeb instance = PlatformWeb();
-  static bool useBuiltInRng = !isNodeJS;
+  static bool useBuiltInRng = !isNodeDart2JS;
 
   const PlatformWeb();
 
