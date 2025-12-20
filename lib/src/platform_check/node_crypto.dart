@@ -22,7 +22,7 @@ extension on Versions {
   external JSAny get node;
 }
 
-bool get isNodeJS => (_process?.versions)?.node != null;
+bool get isNodeJS => _process?.versions?.node != null;
 
 @JS()
 @staticInterop
