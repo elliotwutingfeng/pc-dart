@@ -3,7 +3,7 @@ library nodecrypto;
 
 import 'dart:js_interop';
 
-const bool isWASM = bool.fromEnvironment('dart.tool.dart2wasm');
+const bool isDart2JS = bool.fromEnvironment('dart.tool.dart2js');
 
 @JS()
 @staticInterop
@@ -24,7 +24,7 @@ extension on Versions {
   external JSAny get node;
 }
 
-bool get isNodeDart2JS => _process?.versions?.node != null && !isWASM;
+bool get isNodeDart2JS => _process?.versions?.node != null && isDart2JS;
 
 @JS()
 @staticInterop
